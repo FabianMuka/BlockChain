@@ -20,3 +20,21 @@ class Blockchain:
     def print_chain(self):
         for block in self.chain:
             print(block)
+
+    def is_chain_valid(self):
+        # Iterate through all blocks in the chain
+        for i in range(1, len(self.chain)):
+            current_block = self.chain[i]
+            previous_block = self.chain[i - 1]
+
+            # Check if the current block's hash is correct
+            if current_block.hash != current_block.calculate_hash():
+                print(f"Error: The hash of block {current_block.index} is incorrect.")
+                return False
+
+            # Check if the previous hash is correct
+            if current_block.previous_hash != previous_block.hash:
+                print(f"Error: The previous hash of block {current_block.index} is incorrect.")
+                return False
+
+        return True

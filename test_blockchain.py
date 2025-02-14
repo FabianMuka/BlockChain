@@ -1,29 +1,23 @@
-from blockchain import Blockchain
+from blockchain import Blockchain, Block
 
-# Create a new blockchain
-my_blockchain = Blockchain()
 
-# Add some blocks to the blockchain
-my_blockchain.add_block("Second block")
-my_blockchain.add_block("Third block")
+def test_blockchain():
+    blockchain = Blockchain()
 
-# Print the blockchain
-my_blockchain.print_chain()
+    # Add blocks to the blockchain
+    blockchain.add_block(Block(1, "Second block", blockchain.chain[-1].hash))
+    blockchain.add_block(Block(2, "Third block", blockchain.chain[-1].hash))
 
-# Validate the blockchain
-print("Is blockchain valid?", my_blockchain.is_chain_valid())
+    # Print blockchain to check if mining has worked
+    blockchain.print_chain()
 
-# Let's break the chain by changing the data of the second block
-my_blockchain.chain[1].data = "Modified block"
+    # Validate the blockchain
+    print("Is blockchain valid?", blockchain.is_valid())
 
-# Recalculate the hash for the modified block
-my_blockchain.chain[1].hash = my_blockchain.chain[1].calculate_hash()
+    # Modify a block and check validity again
+    blockchain.chain[1].data = "Modified block"
+    print("Is blockchain valid after modification?", blockchain.is_valid())
 
-# Update the previous_hash of the next block
-my_blockchain.chain[2].previous_hash = my_blockchain.chain[1].hash
 
-# Recalculate the hash for block 2 to reflect the updated previous_hash
-my_blockchain.chain[2].hash = my_blockchain.chain[2].calculate_hash()
-
-# Check the validity again after tampering with the blockchain
-print("Is blockchain valid after modification?", my_blockchain.is_chain_valid())
+if __name__ == "__main__":
+    test_blockchain()
